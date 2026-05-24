@@ -1,0 +1,1137 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>马岳 Yueh · AI内容运营</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --primary: #4A2D8F;
+      --accent-light: #E8E0FF;
+      --accent-pale: #F5F2FF;
+      --text: #1A1A1A;
+      --text-muted: #666666;
+      --font-cn: "Noto Sans SC", sans-serif;
+      --font-en: "Inter", sans-serif;
+      --nav-h: 72px;
+      --max-w: 1100px;
+      --section-pad: clamp(80px, 12vw, 140px);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font-cn);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    .en { font-family: var(--font-en); }
+    a {
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s ease, background 0.2s ease, text-decoration 0.2s ease, opacity 0.2s ease;
+    }
+    img { max-width: 100%; display: block; }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* NAV */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 1000; height: var(--nav-h);
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(74,45,143,0.06);
+      transition: box-shadow 0.3s ease;
+    }
+    .nav.scrolled { box-shadow: 0 2px 24px rgba(74,45,143,0.06); }
+    .nav__inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 28px;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav__logo {
+      font-weight: 500; font-size: 0.95rem; color: var(--text-muted);
+      letter-spacing: 0.04em; border-bottom: 2px solid transparent;
+      cursor: pointer; transition: all 0.25s ease;
+    }
+    .nav__logo:hover { color: #7C5CBF; border-bottom: 2px solid #7C5CBF; text-decoration: none; }
+    .nav__logo span { font-family: var(--font-en); font-weight: 400; margin-left: 6px; opacity: 0.85; }
+    .nav__toggle {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 8px;
+    }
+    .nav__toggle span { display: block; width: 22px; height: 2px; background: var(--primary); transition: transform 0.3s ease, opacity 0.3s ease; }
+    .nav__toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav__toggle.open span:nth-child(2) { opacity: 0; }
+    .nav__toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .nav__links { display: flex; gap: 36px; list-style: none; margin: 0; padding: 0; }
+    .nav__links a {
+      font-size: 0.875rem; color: var(--text-muted); letter-spacing: 0.04em;
+      border-bottom: 2px solid transparent; transition: color 0.25s ease, border-color 0.25s ease;
+    }
+    .nav__links a:hover { color: #7C5CBF; border-bottom: 2px solid #7C5CBF; text-decoration: none; }
+
+    /* HERO */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; overflow: hidden;
+    }
+    .hero__bg {
+      position: absolute; inset: 0; z-index: 0; overflow: hidden;
+      background: linear-gradient(135deg, #F8F5FF 0%, #EDE8FF 40%, #F0EBFF 70%, #FAF8FF 100%);
+    }
+    .hero__arch { position: absolute; border-radius: 50%; pointer-events: none; }
+    .hero__arch--1 {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(180,160,255,0.3) 0%, transparent 70%);
+      top: -200px; right: -150px;
+    }
+    .hero__arch--2 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(200,180,255,0.2) 0%, transparent 70%);
+      bottom: -150px; left: -100px;
+    }
+    .hero__content { position: relative; z-index: 3; padding: var(--nav-h) 28px 100px; max-width: 800px; }
+    .hero__title {
+      margin: 0 0 24px;
+      font-size: clamp(2.8rem, 7vw, 4.5rem);
+      font-weight: 500; color: #3D2B8E; letter-spacing: 0.06em; line-height: 1.2;
+    }
+    .hero__title .en { font-weight: 400; margin-left: 0.15em; }
+    .hero__divider { width: 60px; height: 1px; margin: 0 auto 24px; background: #6B4FBB; }
+    .hero__subtitle { margin: 0 0 16px; font-size: clamp(1rem,2.2vw,1.15rem); color: #6B4FBB; font-weight: 400; letter-spacing: 0.08em; }
+    .hero__tagline { margin: 0; font-size: clamp(0.95rem,1.8vw,1.05rem); color: #7B6BBF; font-weight: 300; letter-spacing: 0.12em; }
+    .hero__intro { text-align: center; }
+    .hero__intro.fade-in { transition-delay: 0.6s; }
+    .hero__intro-divider { width: 40px; height: 1px; background: #9B8BBF; margin: 28px auto; opacity: 0.6; }
+    .hero__intro-line--1 { margin: 0 0 10px; font-family: var(--font-en); font-size: 13px; color: #9B8BBF; letter-spacing: 0.12em; font-weight: 400; }
+    .hero__intro-line--2 { margin: 0 0 10px; font-family: var(--font-en); font-size: 16px; color: #6B4FBB; letter-spacing: 0.06em; font-weight: 500; font-style: italic; }
+    .hero__intro-line--3 { margin: 0; font-family: var(--font-en); font-size: 13px; color: #9B8BBF; letter-spacing: 0.08em; font-weight: 400; }
+    .hero__scroll {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 6px;
+      color: #6B4FBB; opacity: 0.85; cursor: pointer;
+      animation: bounce 2s infinite; transition: color 0.2s ease, opacity 0.2s ease;
+    }
+    .hero__scroll:hover { color: var(--primary); opacity: 1; }
+    .hero__scroll svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* SECTIONS */
+    .section { padding: var(--section-pad) 28px; }
+    .section__inner { max-width: var(--max-w); margin: 0 auto; }
+    .section__header { margin-bottom: 56px; }
+    .section__title { margin: 0 0 10px; font-size: clamp(1.6rem,3.5vw,2rem); font-weight: 500; color: var(--primary); letter-spacing: 0.04em; }
+    .section__title .en { font-weight: 400; }
+    .section__subtitle { margin: 0; font-size: 0.95rem; color: var(--text-muted); font-weight: 300; letter-spacing: 0.06em; }
+
+    /* ABOUT */
+    .about { background: var(--bg); }
+    .about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .about__text { font-size: 1rem; color: var(--text); line-height: 1.9; font-weight: 300; margin: 0; }
+    .about__tags { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; }
+    .tag {
+      display: inline-block; padding: 10px 20px;
+      background: rgba(232,224,255,0.65); color: rgba(74,45,143,0.72);
+      font-size: 0.85rem; border-radius: 100px; letter-spacing: 0.04em;
+      font-weight: 400; cursor: default; user-select: none;
+    }
+
+    /* WRITING */
+    .writing { background: var(--accent-pale); padding-bottom: 60px; }
+    .cards--writing { display: grid; grid-template-columns: repeat(2,1fr); gap: 32px; }
+    .card {
+      background: var(--bg); border-radius: 4px; padding: 36px 32px;
+      transition: all 0.25s ease; position: relative;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(124,92,191,0.12); }
+    .card__head { margin-bottom: 20px; }
+    .card__title { margin: 0 0 6px; font-size: 1.2rem; font-weight: 500; color: var(--text); }
+    .card__meta { margin: 0; font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-en); letter-spacing: 0.06em; }
+    .card__body { margin: 0 0 24px; font-size: 0.92rem; color: var(--text-muted); line-height: 1.85; font-weight: 300; }
+    .cards--writing .card__body {
+      text-align: justify; font-family: "Georgia","SimSun",serif;
+      font-size: 13px; line-height: 1.9; color: #6B6B8A; font-weight: 400;
+    }
+
+    /* MEDIA */
+    .media { background: var(--accent-pale); padding-top: 60px; }
+    .media__blocks { display: flex; flex-direction: column; gap: 56px; }
+    .media__block-title { margin: 0 0 12px; font-size: 1.05rem; font-weight: 500; color: var(--text); letter-spacing: 0.02em; }
+    .media__block-desc { margin: 0; font-size: 0.92rem; color: var(--text-muted); line-height: 1.85; font-weight: 300; }
+    .media__xhs {
+      display: grid; grid-template-columns: 1fr auto; gap: 32px 40px; align-items: center;
+      background: var(--bg); border-radius: 12px; padding: 36px 32px; transition: all 0.25s ease;
+    }
+    .media__xhs:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(124,92,191,0.12); }
+    .media__xhs-action { flex-shrink: 0; }
+    .media__xhs-review { grid-column: 1 / -1; margin-top: 20px; }
+    .media__xhs-review summary {
+      display: inline-block; background: transparent; border: 1.5px solid #7C5CBF;
+      color: #7C5CBF; padding: 8px 20px; border-radius: 6px; font-size: 13px;
+      letter-spacing: 0.05em; font-weight: 400; cursor: pointer; transition: all 0.25s ease;
+      list-style: none; user-select: none;
+    }
+    .media__xhs-review summary:hover { background: #7C5CBF; color: #ffffff; transform: translateY(-2px); }
+    .media__xhs-review summary::-webkit-details-marker { display: none; }
+    .media__xhs-review summary::marker { content: ""; }
+    .media__xhs-review summary::after { content: " ▼"; font-size: 12px; opacity: 0.7; }
+    .media__xhs-review[open] summary::after { content: " ▲"; }
+    .media__xhs-review-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 16px; }
+    .media__xhs-review-card { background: #F5F2FF; border-radius: 10px; padding: 20px 24px; border-left: 3px solid #9B7FD4; }
+    .media__xhs-review-card h4 { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: #4A2D8F; }
+    .media__xhs-review-card p { margin: 0; font-family: "Georgia","SimSun",serif; font-size: 13px; line-height: 1.9; color: #6B6B8A; font-weight: 400; }
+    .cards--media-wechat { display: grid; grid-template-columns: repeat(2,1fr); gap: 32px; margin-top: 24px; }
+    .media .card { border-radius: 12px; }
+    .card__media-desc { margin: 0 0 20px; font-family: "Georgia","SimSun",serif; font-size: 13px; line-height: 1.9; color: #6B6B8A; font-weight: 400; }
+    .card__tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .card__tag { font-size: 0.75rem; color: #C4B5E8; background: rgba(245,242,255,0.9); padding: 4px 12px; border-radius: 100px; letter-spacing: 0.04em; cursor: default; user-select: none; }
+
+    /* BUTTONS */
+    .btn-external {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 28px; background: transparent; color: #7C5CBF;
+      font-size: 14px; font-family: var(--font-cn); font-weight: 400;
+      letter-spacing: 0.05em; border: 1.5px solid #7C5CBF; border-radius: 6px;
+      cursor: pointer; transition: all 0.25s ease;
+    }
+    .btn-external:hover { background: #7C5CBF; color: #ffffff; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(124,92,191,0.25); gap: 10px; }
+    .card__btn { margin-top: 20px; }
+    .card--with-btn { padding-bottom: 56px; }
+    .card__btn--corner { position: absolute; right: 32px; bottom: 32px; margin-top: 0; }
+
+    /* PROJECTS */
+    .projects { background: var(--bg); }
+    .cards--projects { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
+    .card--project { padding-top: 0; overflow: hidden; display: flex; flex-direction: column; }
+    .card--project::before { content: ""; display: block; height: 3px; background: var(--primary); margin-bottom: 32px; }
+    .card--project .card__body { flex: 1; margin-bottom: 0; }
+    .card-footer { margin-top: 24px; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 8px; min-height: 72px; align-content: flex-start; }
+    .card-btn-wrap { height: 56px; display: flex; align-items: center; margin-top: 16px; }
+    .card-btn-wrap a { width: 100%; height: 44px; display: flex; align-items: center; justify-content: center; }
+    .card--project .card__tag { font-size: 12px; padding: 4px 10px; }
+    .card__oneliner { margin: 0 0 16px; font-size: 0.9rem; color: var(--primary); font-weight: 400; letter-spacing: 0.02em; }
+    .card__btn--block { margin-top: auto; padding-top: 8px; }
+
+    /* PHOTO */
+    .photo { background: var(--accent-pale); padding-bottom: var(--section-pad); }
+    .photo__gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 1100px; margin: 0 auto; }
+    .photo__frame { position: relative; border-radius: 12px; overflow: hidden; cursor: default; }
+    .photo__frame img { width: 100%; height: 460px; object-fit: cover; display: block; }
+    .photo__overlay {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(74,45,143,0.42); color: #FFFFFF; font-size: 0.8rem; font-weight: 300;
+      letter-spacing: 0.12em; opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
+    }
+    .photo__frame:hover .photo__overlay { opacity: 1; }
+    .photo__item { cursor: default; }
+    .photo__label { margin: 10px 0 0; font-size: 13px; color: #9B8BBF; text-align: center; font-weight: 300; }
+    .photo__caption { margin: 20px 0 0; text-align: center; font-size: 0.85rem; color: var(--text-muted); font-weight: 300; letter-spacing: 0.1em; font-style: italic; }
+
+    /* CONTACT */
+    .contact { background: var(--primary); color: #FFFFFF; text-align: center; padding: clamp(80px,14vw,120px) 28px; }
+    .contact__title { margin: 0 0 40px; font-family: var(--font-en); font-size: clamp(2rem,5vw,2.8rem); font-weight: 300; letter-spacing: 0.06em; }
+    .contact__links { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+    .contact__links a { font-size: 1.05rem; font-weight: 300; letter-spacing: 0.04em; opacity: 0.92; cursor: pointer; border-bottom: 1px solid transparent; transition: color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease; }
+    .contact__links a:hover { opacity: 1; text-decoration: none; }
+    .contact__links a.contact__email:hover { color: #C4B5E8; border-bottom: 1px solid #C4B5E8; }
+    .contact__note { margin: 0 0 48px; font-size: 0.85rem; opacity: 0.7; font-weight: 300; letter-spacing: 0.08em; }
+    .contact__copy { margin: 0; font-size: 0.75rem; opacity: 0.45; font-family: var(--font-en); letter-spacing: 0.06em; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .about__grid { grid-template-columns: 1fr; gap: 40px; }
+      .about__tags { justify-content: flex-start; }
+      .cards--writing { grid-template-columns: 1fr; }
+      .cards--media-wechat { grid-template-columns: 1fr; }
+      .media__xhs { grid-template-columns: 1fr; }
+      .media__xhs-action { justify-self: start; }
+      .media__xhs-review-cards { grid-template-columns: 1fr; }
+      .cards--projects { grid-template-columns: 1fr; }
+      .photo__gallery { grid-template-columns: 1fr; }
+      .photo__frame img { height: 320px; }
+    }
+    @media (max-width: 768px) {
+      .nav__toggle { display: flex; }
+      .nav__links {
+        position: fixed; top: var(--nav-h); left: 0; right: 0;
+        flex-direction: column; gap: 0; background: rgba(255,255,255,0.98);
+        backdrop-filter: blur(12px); padding: 16px 0 24px;
+        border-bottom: 1px solid rgba(74,45,143,0.06);
+        transform: translateY(-120%); opacity: 0; pointer-events: none;
+        transition: transform 0.35s ease, opacity 0.35s ease;
+      }
+      .nav__links.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+      .nav__links li { text-align: center; }
+      .nav__links a { display: block; padding: 14px 28px; font-size: 0.95rem; }
+      .card { padding: 28px 24px; }
+      .card--with-btn { padding-bottom: 52px; }
+      .card__btn--corner { right: 24px; bottom: 24px; }
+      .hero__intro-line--1, .hero__intro-line--3 { font-size: 11px; }
+      .hero__intro-line--2 { font-size: 14px; }
+    }
+
+    /* ========== 覆盖层 ========== */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .profile-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: linear-gradient(135deg, #2A1A4E 0%, #3D2875 50%, #2A1A4E 100%);
+      z-index: 9999; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      animation: fadeIn 0.4s ease forwards;
+      perspective: 1200px;
+    }
+
+    .profile-overlay__close {
+      position: absolute; top: 32px; right: 40px; font-size: 28px;
+      color: rgba(255,255,255,0.4); background: none; border: none;
+      padding: 0; line-height: 1; cursor: pointer; transition: color 0.25s ease;
+    }
+    .profile-overlay__close:hover { color: rgba(255,255,255,0.9); }
+
+    .profile-overlay__counter {
+      font-family: var(--font-en); font-size: 11px;
+      color: rgba(255,255,255,0.3); letter-spacing: 0.3em;
+      margin-bottom: 16px; text-align: center;
+    }
+
+    /* 3D 旋转木马容器 */
+    .carousel3d {
+      position: relative;
+      width: 700px; height: 520px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .carousel3d__track {
+      position: relative; width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* 三张可见卡片 */
+    .c3d-card {
+      position: absolute;
+      border-radius: 12px; overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      pointer-events: none;
+    }
+    .c3d-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* 主卡 */
+    .c3d-card--main {
+      width: 360px; height: 480px;
+      z-index: 3;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+      transform: translateX(0) scale(1) rotateY(0deg);
+      filter: brightness(1);
+      pointer-events: auto;
+    }
+
+    /* 左侧预览卡 */
+    .c3d-card--prev {
+      width: 280px; height: 380px;
+      left: 0; z-index: 2;
+      transform: translateX(-20px) scale(0.88) rotateY(18deg);
+      opacity: 0.55; filter: brightness(0.55);
+    }
+
+    /* 右侧预览卡 */
+    .c3d-card--next {
+      width: 280px; height: 380px;
+      right: 0; z-index: 2;
+      transform: translateX(20px) scale(0.88) rotateY(-18deg);
+      opacity: 0.55; filter: brightness(0.55);
+    }
+
+    /* 进出动画 */
+    .c3d-card--exit-left {
+      transform: translateX(-130%) scale(0.7) rotateY(-25deg) !important;
+      opacity: 0 !important; filter: brightness(0.3) !important;
+    }
+    .c3d-card--exit-right {
+      transform: translateX(130%) scale(0.7) rotateY(25deg) !important;
+      opacity: 0 !important; filter: brightness(0.3) !important;
+    }
+    .c3d-card--enter-from-right {
+      transform: translateX(130%) scale(0.7) rotateY(25deg) !important;
+      opacity: 0 !important; filter: brightness(0.3) !important;
+      transition: none !important;
+    }
+    .c3d-card--enter-from-left {
+      transform: translateX(-130%) scale(0.7) rotateY(-25deg) !important;
+      opacity: 0 !important; filter: brightness(0.3) !important;
+      transition: none !important;
+    }
+
+    /* 箭头按钮 */
+    .carousel3d__btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px;
+      border: 1px solid rgba(255,255,255,0.25); border-radius: 50%;
+      background: transparent; color: rgba(255,255,255,0.5);
+      font-size: 18px; line-height: 1; cursor: pointer; z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .carousel3d__btn:hover { border-color: rgba(255,255,255,0.8); color: white; }
+    .carousel3d__btn--prev { left: -64px; }
+    .carousel3d__btn--next { right: -64px; }
+
+    /* 圆点 */
+    .carousel3d__dots {
+      display: flex; gap: 8px; justify-content: center;
+      margin-bottom: 16px; list-style: none; padding: 0;
+    }
+    .carousel3d__dots button {
+      border: none; padding: 0; cursor: pointer; transition: all 0.3s ease;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+    }
+    .carousel3d__dots button.active {
+      background: rgba(255,255,255,0.9);
+      width: 24px; border-radius: 4px;
+    }
+
+    /* 字幕 */
+    .profile-overlay__subtitle-wrap {
+      margin-top: 24px; min-height: 60px; max-width: 420px;
+      text-align: center; width: 100%;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .profile-overlay__subtitle {
+      margin: 0; font-family: Georgia, serif; font-size: 15px;
+      color: rgba(255,255,255,0.85); letter-spacing: 0.1em; line-height: 1.9;
+      opacity: 0; transform: translateY(12px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .profile-overlay__subtitle.is-visible { opacity: 1; transform: translateY(0); }
+    .profile-overlay__subtitle.is-leaving { opacity: 0; transform: translateY(-12px); }
+
+    /* 两侧装饰 */
+    .overlay-left-deco {
+      position: absolute; left: 6%; top: 50%; transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 24px; opacity: 0.5;
+    }
+    .overlay-right-deco {
+      position: absolute; right: 6%; top: 50%; transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 24px; opacity: 0.5; align-items: center;
+    }
+    .overlay-deco__vline-top { width: 1px; height: 80px; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.15)); margin: 0 auto; }
+    .overlay-deco__vline-bottom { width: 1px; height: 80px; background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent); margin: 0 auto; }
+    .overlay-deco__texts { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+    .overlay-deco__label { font-size: 11px; letter-spacing: 0.25em; writing-mode: vertical-rl; color: rgba(255,255,255,0.2); }
+
+    @media (max-width: 768px) {
+      .carousel3d { width: 90vw; height: auto; }
+      .c3d-card--main { width: 90vw; height: 72vw; max-height: 460px; }
+      .c3d-card--prev, .c3d-card--next { display: none; }
+      .carousel3d__btn--prev { left: -12px; }
+      .carousel3d__btn--next { right: -12px; }
+      .profile-overlay__subtitle-wrap { max-width: 90vw; }
+      .profile-overlay__subtitle { font-size: 13px; }
+      .overlay-left-deco, .overlay-right-deco { display: none; }
+    }
+  </style>
+<style>
+@keyframes yw-pulse{0%,100%{opacity:1}50%{opacity:.15}}
+@keyframes yw-scan{0%{top:-2px;opacity:0}5%{opacity:1}95%{opacity:.6}100%{top:100%;opacity:0}}
+@keyframes yw-fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes yw-glow{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes yw-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+</style>
+</head>
+<body id="top">
+
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#top" class="nav__logo">马岳 <span class="en">Yueh</span></a>
+      <button class="nav__toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav__links" id="navLinks">
+        <li><a href="#about">关于我</a></li>
+        <li><a href="#writing">文字</a></li>
+        <li><a href="#projects">项目</a></li>
+        <li><a href="#contact">联系</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="hero" id="hero">
+    <div class="hero__bg" aria-hidden="true">
+      <div class="hero__arch hero__arch--1"></div>
+      <div class="hero__arch hero__arch--2"></div>
+    </div>
+    <div class="hero__content fade-in">
+      <h1 class="hero__title">马岳 <span class="en">Yueh</span></h1>
+      <div class="hero__divider" aria-hidden="true"></div>
+      <p class="hero__subtitle">AI产品运营 · AI内容运营 · 懂技术的运营人</p>
+      <p class="hero__tagline">用文字理解用户，用AI放大价值</p>
+      <div class="hero__intro fade-in">
+        <div class="hero__intro-divider" aria-hidden="true"></div>
+        <p class="hero__intro-line--1">Master's in Information Systems · University of Galway, Ireland</p>
+        <p class="hero__intro-line--2">Words that make people feel. Systems that make AI work.</p>
+        <p class="hero__intro-line--3">I study a product until I understand its soul — then write it into existence.</p>
+      </div>
+    </div>
+    <a href="#about" class="hero__scroll" aria-label="向下滚动">
+      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </a>
+  </section>
+
+  <section class="section about" id="about">
+    <div class="section__inner fade-in">
+      <div class="about__grid">
+        <p class="about__text">爱尔兰国立高威大学信息系统管理硕士，3年EdTech从业经验。擅长将复杂信息转化为有传播力的内容，同时具备AI系统落地能力——可独立完成监控看板搭建、结构化测评集建设、Prompt调优与BAD CASE闭环。相信好内容和好产品一样，都需要真正理解用户。</p>
+        <div class="about__tags">
+          <span class="tag">小红书运营</span>
+          <span class="tag">监控看板设计</span>
+          <span class="tag">Prompt工程</span>
+          <span class="tag">LLM测评</span>
+          <span class="tag">用户洞察</span>
+          <span class="tag">内容策划</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section writing" id="writing">
+    <div class="section__inner">
+      <header class="section__header fade-in">
+        <h2 class="section__title">Writing <span class="en">· 文字</span></h2>
+        <p class="section__subtitle">文字是理解用户最近的路</p>
+      </header>
+      <div class="cards--writing">
+        <article class="card fade-in">
+          <div class="card__head">
+            <h3 class="card__title">致谢·爱尔兰</h3>
+            <p class="card__meta">爱尔兰 · 2025</p>
+          </div>
+          <p class="card__body">他日总觉得来日方长，但结束来得猝不及防。寥寥数语就写尽了这条路，我却走了15730公里，跨越多国，百感交集。片纸有尽，感激无尽。……最想感谢的是自己，感谢在无数个emo难捱的日夜依旧想方设法开心、折腾、烹饪、温暖、发疯、努力、保持美丽、保持风格的自己。往事已去无需追看，来日之路光明灿烂。</p>
+          <div class="card__tags"><span class="card__tag">个人叙事 · 留学</span></div>
+        </article>
+        <article class="card fade-in">
+          <div class="card__head">
+            <h3 class="card__title">再见·衡师</h3>
+            <p class="card__meta">毕业 · 2020</p>
+          </div>
+          <p class="card__body">离开真的残酷嘛，一座岛锁住一群人！四年，我们一起感受过这座城市的脏，一起在铺满紫色晚霞的校园里散步、嬉戏。这些情谊，像极了冰糖葫芦，那迷人的酸与甜永远回味不完。希望大家以后都是磨镜的少年，孜孜采掘自己的倒影，也希望大家都是昆山的青玉，沉睡在你温柔的矿脉。</p>
+          <div class="card__tags"><span class="card__tag">毕业 · 情感</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section media" id="media">
+    <div class="section__inner">
+      <header class="section__header fade-in">
+        <h2 class="section__title">Media <span class="en">· 内容</span></h2>
+      </header>
+      <div class="media__blocks">
+        <div class="media__xhs fade-in">
+          <div class="media__xhs-text">
+            <h3 class="media__block-title">小红书 · 垂直内容运营</h3>
+            <p class="media__block-desc">聚焦英语国家博士申请细分赛道，1个月发布60篇内容，单篇最高阅读3475次，累计获赞与收藏519次。</p>
+          </div>
+          <div class="media__xhs-action">
+            <a class="btn-external" href="https://xhslink.com/m/3m9F0unNMcP" target="_blank" rel="noopener noreferrer">查看小红书主页 →</a>
+          </div>
+          <details class="media__xhs-review">
+            <summary>数据复盘</summary>
+            <div class="media__xhs-review-cards">
+              <div class="media__xhs-review-card">
+                <h4>IP定位与选题逻辑</h4>
+                <p><strong>「垂直赛道：英语国家博士申请」</strong><br>目标用户 25-35岁，选题三主线——院校门槛对比 / 奖学金规划 / 签证就业政策，每篇预埋咨询钩子，用信息差制造私信动机。</p>
+              </div>
+              <div class="media__xhs-review-card">
+                <h4>爆款内容规律</h4>
+                <p><strong>「封面即答案，正文留余地」</strong><br>封面直呈核心数据（分数线/费用/年限），标题制造信息缺口，正文只解决一个问题。单篇最高阅读 3475次。</p>
+              </div>
+              <div class="media__xhs-review-card">
+                <h4>用户反馈与转化路径</h4>
+                <p><strong>「内容获客 → 需求挖掘 → 初步转化」</strong><br>精准用户主动私信，咨询集中在申请条件、费用预算、院校对比，通过专业内容建立信任，私信挖掘核心痛点促成转化。</p>
+              </div>
+            </div>
+          </details>
+        </div>
+        <div class="fade-in">
+          <h3 class="media__block-title">微信公众号 · 幸福e家</h3>
+          <p class="media__block-desc">独立策划并发布40+篇推送，覆盖迎新活动、人物专访、热点借势、校园生活等多元内容类型。</p>
+          <div class="cards--media-wechat">
+            <article class="card">
+              <div class="card__head"><h3 class="card__title">2018/10/20 与你相见的第31天</h3></div>
+              <p class="card__media-desc">迎新主题推送，用诗意的笔触记录与新同学相遇的第31天</p>
+              <a class="btn-external" href="https://mp.weixin.qq.com/s/kTYjPsqtmQE57yJ87dbPfA" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+            </article>
+            <article class="card">
+              <div class="card__head"><h3 class="card__title">【学院人物】他：年与"时"驰，志与日云</h3></div>
+              <p class="card__media-desc">优秀学生人物专访，记录一枚大三学长的成长与蜕变</p>
+              <a class="btn-external" href="https://mp.weixin.qq.com/s/EAinrSryOpBt4VuGBGXWIQ" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+            </article>
+            <article class="card">
+              <div class="card__head"><h3 class="card__title">推荐·识途</h3></div>
+              <p class="card__media-desc">观看中传毕业设计展有感，文字细腻，图文排版精致</p>
+              <a class="btn-external" href="https://mp.weixin.qq.com/s/rTZj3ruD-uwjOnXMMlI5hw" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+            </article>
+            <article class="card">
+              <div class="card__head"><h3 class="card__title">世界杯·拯救天台少年</h3></div>
+              <p class="card__media-desc">世界杯热点借势推送，角度有趣，不按套路出牌</p>
+              <a class="btn-external" href="https://mp.weixin.qq.com/s/mWOIC-0LYD6nUTiD_ee9pw" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section projects" id="projects">
+    <div class="section__inner">
+      <header class="section__header fade-in">
+        <h2 class="section__title">AI Projects <span class="en">· 项目</span></h2>
+        <p class="section__subtitle">不只是会用AI，而是能用AI落地</p>
+      </header>
+      <div class="cards--projects">
+        <article class="card card--project fade-in">
+          <div class="card__head">
+            <h3 class="card__title">AI智能学员服务系统</h3>
+            <p class="card__oneliner">基于Coze平台独立搭建的智能客服工作流</p>
+          </div>
+          <p class="card__body">主工作流 AI_assistant + 5子工作流多级意图识别架构，覆盖 general_faq / query_progress / homework_help / personalized_path / course_recommend 五大场景。独立搭建 L0~L3 实时监控看板，构建 120 条结构化测评集（典型/边界/多意图/负样本），持续基于 BAD CASE 进行 Prompt 调优迭代，形成完整 AI 运营闭环。</p>
+          <div class="card-footer">
+            <div class="card-tags">
+              <span class="card__tag">Coze</span><span class="card__tag">工作流编排</span>
+              <span class="card__tag">Prompt工程</span><span class="card__tag">飞书集成</span>
+            </div>
+            <div class="card-btn-wrap">
+              <a class="card__btn card__btn--block btn-external" href="https://www.coze.cn/store/agent/7624381354276585513?from=store_search_suggestion&bid=6k3ldnsm05009" target="_blank" rel="noopener noreferrer">体验智能体 →</a>
+            </div>
+          </div>
+        </article>
+
+
+        <article class="card card--project fade-in">
+          <div class="card__head">
+            <h3 class="card__title">AI理财产品全链路落地</h3>
+            <p class="card__oneliner">从用户调研到Web端全交互实现的完整产品</p>
+          </div>
+          <p class="card__body">独立完成用户调研（3个用户画像、5大痛点）→竞品分析→12章PRD→Axure高保真原型→Web端全交互实现。核心功能调用Claude API实现一句话多意图记账，用户输入自然语言后批量解析多条记账意图，一键全部入账。</p>
+          <div class="card-footer">
+            <div class="card-tags">
+              <span class="card__tag">Claude API</span><span class="card__tag">vibe coding</span>
+              <span class="card__tag">Axure</span><span class="card__tag">全链路交付</span>
+            </div>
+            <div class="card-btn-wrap">
+              <a class="card__btn card__btn--block btn-external" href="https://myproject-psi-red.vercel.app/heluo_finance_web%20(3).html" target="_blank" rel="noopener noreferrer">体验产品 →</a>
+            </div>
+          </div>
+        </article>
+        <article class="card card--project fade-in">
+          <div class="card__head">
+            <h3 class="card__title">AI策略字典</h3>
+            <p class="card__oneliner">在大模型之上建立确定性规则控制层</p>
+          </div>
+          <p class="card__body">围绕用户全生命周期5个阶段，梳理18个业务场景、制定35条差异化策略。设计RAG路由分层机制，知识类查询走知识库、情绪类走规则引擎；高危信号自动触发飞书P0告警，整体架构升级为规则管控+AI执行+人工兜底三层体系。</p>
+          <div class="card-footer">
+            <div class="card-tags">
+              <span class="card__tag">RAG</span><span class="card__tag">规则引擎</span>
+              <span class="card__tag">飞书告警</span><span class="card__tag">风控设计</span>
+            </div>
+            <div class="card-btn-wrap"></div>
+          </div>
+        </article>
+      </div>
+
+      <div style="margin-top:48px;padding:0;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+    <div>
+      <div style="font-size:20px;font-weight:600;color:#3b2d8a;">实时数据监控看板 & 测评集</div>
+      <div style="font-size:13px;color:#9ca3af;margin-top:4px;">AI智能学员服务系统 · 核心运营数据展示</div>
+    </div>
+    <button id="yw-toggle-btn" class="card__btn card__btn--block btn-external" onclick="(function(btn){var box=document.getElementById('yw-box');var isOpen=box.style.display==='block';box.style.display=isOpen?'none':'block';btn.innerHTML=isOpen?'查看数据看板 &amp; 测评集 <span style=\'font-size:11px\'>▼</span>':'收起 <span style=\'font-size:11px\'>▲</span>';if(!isOpen&&!btn.dataset.init){btn.dataset.init='1';ywInitDB();}})(this)">查看数据看板 & 测评集 <span style="font-size:11px">▼</span></button>
+  </div>
+
+  <div id="yw-box" style="display:none;">
+    <div style="background:#0a0812;border-radius:16px;padding:32px 36px;font-family:'PingFang SC',-apple-system,sans-serif;color:#e9e4ff;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#7c3aed,#a78bfa,#7c3aed,transparent);animation:yw-glow 2.5s ease-in-out infinite;"></div>
+      <div style="position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(167,139,250,.25),transparent);animation:yw-scan 5s linear infinite;pointer-events:none;"></div>
+      <canvas id="yw-particles" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;opacity:.3;"></canvas>
+
+      <div style="position:relative;z-index:2;">
+        <div style="display:flex;gap:4px;margin-bottom:28px;background:#100d1e;border-radius:10px;padding:4px;max-width:400px;">
+          <button onclick="ywTab('db')" id="yw-b1" style="flex:1;padding:10px 0;font-size:14px;border-radius:7px;cursor:pointer;border:none;background:#1e1640;color:#c4b5fd;font-weight:600;letter-spacing:.03em;transition:all .2s;">实时监控看板</button>
+          <button onclick="ywTab('ts')" id="yw-b2" style="flex:1;padding:10px 0;font-size:14px;border-radius:7px;cursor:pointer;border:none;background:transparent;color:#6b5fa6;font-weight:500;transition:all .2s;">120条测评集</button>
+        </div>
+
+        <div id="yw-db">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:20px;">
+            <span style="width:7px;height:7px;border-radius:50%;background:#a78bfa;display:inline-block;animation:yw-pulse 1.4s infinite;"></span>
+            <span style="font-size:12px;color:#7c6bb5;letter-spacing:.06em;">LIVE · AI 服务指标监控 · L0 → L3 四层体系</span>
+            <span style="margin-left:auto;font-size:12px;color:#4a3f7a;font-variant-numeric:tabular-nums;" id="yw-time"></span>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+              <span style="font-size:11px;padding:3px 12px;border-radius:4px;font-weight:700;background:#2e1065;color:#c4b5fd;letter-spacing:.04em;">L0  北极星</span>
+              <div style="flex:1;height:1px;background:linear-gradient(90deg,#3b2d6b,transparent);"></div>
+            </div>
+            <div style="background:#100d1e;border:1px solid #2a2050;border-radius:12px;padding:20px 24px;border-left:3px solid #7c3aed;display:flex;align-items:center;gap:24px;">
+              <div style="flex:1;">
+                <div style="font-size:42px;font-weight:800;color:#c4b5fd;line-height:1;" id="yw-v0">0%</div>
+                <div style="font-size:13px;color:#5b4e8a;margin-top:5px;">AI 服务后继续学习率（24h）</div>
+                <div style="height:4px;background:#1e1640;border-radius:2px;margin-top:14px;overflow:hidden;max-width:500px;"><div style="width:0;height:100%;background:linear-gradient(90deg,#5b21b6,#a78bfa);border-radius:2px;transition:width 1.8s cubic-bezier(.4,0,.2,1);" id="yw-bar0"></div></div>
+                <span style="display:inline-block;font-size:11px;background:#2e1065;color:#a78bfa;padding:4px 12px;border-radius:5px;margin-top:10px;font-weight:600;border:1px solid #4c1d95;">达标 · 目标 75%</span>
+              </div>
+              <div style="width:72px;height:72px;flex-shrink:0;">
+                <svg viewBox="0 0 72 72" style="width:72px;height:72px;">
+                  <circle cx="36" cy="36" r="30" fill="none" stroke="#1e1640" stroke-width="4.5"/>
+                  <circle cx="36" cy="36" r="30" fill="none" stroke="#7c3aed" stroke-width="4.5" stroke-dasharray="188" stroke-dashoffset="188" id="yw-ring0" style="transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset 1.8s cubic-bezier(.4,0,.2,1);" stroke-linecap="round"/>
+                  <text x="36" y="41" text-anchor="middle" font-size="13" fill="#c4b5fd" font-weight="700">95%</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+              <span style="font-size:11px;padding:3px 12px;border-radius:4px;font-weight:700;background:#1a1035;color:#a78bfa;letter-spacing:.04em;">L1  业务指标</span>
+              <div style="flex:1;height:1px;background:linear-gradient(90deg,#2e2060,transparent);"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+              <div style="background:#100d1e;border:1px solid #2a2050;border-radius:10px;padding:16px 18px;border-top:2px solid #7c3aed;"><div style="font-size:26px;font-weight:700;color:#c4b5fd;" id="yw-v1">0%</div><div style="font-size:12px;color:#5b4e8a;margin-top:3px;">意图识别准确率</div><div style="height:3px;background:#1a1035;border-radius:2px;margin-top:9px;overflow:hidden;"><div style="width:0;height:100%;background:linear-gradient(90deg,#6d28d9,#c4b5fd);border-radius:2px;transition:width 1.4s .2s ease;" id="yw-bar1"></div></div><span style="font-size:10px;background:#1e1040;color:#8b5cf6;padding:3px 8px;border-radius:4px;margin-top:7px;display:inline-block;font-weight:600;">达标 ≥82%</span></div>
+              <div style="background:#100d1e;border:1px solid #2a2050;border-radius:10px;padding:16px 18px;border-top:2px solid #f472b6;"><div style="font-size:26px;font-weight:700;color:#f9a8d4;" id="yw-v2">0%</div><div style="font-size:12px;color:#5b4e8a;margin-top:3px;">人工转接率</div><div style="height:3px;background:#1a1035;border-radius:2px;margin-top:9px;overflow:hidden;"><div style="width:0;height:100%;background:linear-gradient(90deg,#9d174d,#f472b6);border-radius:2px;transition:width 1.4s .3s ease;" id="yw-bar2"></div></div><span style="font-size:10px;background:#4a0828;color:#f9a8d4;padding:3px 8px;border-radius:4px;margin-top:7px;display:inline-block;font-weight:600;">P1 过低</span></div>
+              <div style="background:#100d1e;border:1px solid #2a2050;border-radius:10px;padding:16px 18px;border-top:2px solid #8b5cf6;"><div style="font-size:26px;font-weight:700;color:#c4b5fd;" id="yw-v3">0%</div><div style="font-size:12px;color:#5b4e8a;margin-top:3px;">用户满意度</div><div style="height:3px;background:#1a1035;border-radius:2px;margin-top:9px;overflow:hidden;"><div style="width:0;height:100%;background:linear-gradient(90deg,#5b21b6,#a78bfa);border-radius:2px;transition:width 1.4s .4s ease;" id="yw-bar3"></div></div><span style="font-size:10px;background:#1e1040;color:#8b5cf6;padding:3px 8px;border-radius:4px;margin-top:7px;display:inline-block;font-weight:600;">达标</span></div>
+              <div style="background:#100d1e;border:1px solid #2a2050;border-radius:10px;padding:16px 18px;border-top:2px solid #ddd6fe;"><div style="font-size:26px;font-weight:700;color:#ddd6fe;" id="yw-v4">0分</div><div style="font-size:12px;color:#5b4e8a;margin-top:3px;">NPS 近似值</div><div style="height:3px;background:#1a1035;border-radius:2px;margin-top:9px;overflow:hidden;"><div style="width:0;height:100%;background:linear-gradient(90deg,#4c1d95,#ddd6fe);border-radius:2px;transition:width 1.4s .5s ease;" id="yw-bar4"></div></div><span style="font-size:10px;background:#2e1065;color:#c4b5fd;padding:3px 8px;border-radius:4px;margin-top:7px;display:inline-block;font-weight:600;">P2 目标45</span></div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+              <span style="font-size:11px;padding:3px 12px;border-radius:4px;font-weight:700;background:#150f2e;color:#818cf8;letter-spacing:.04em;">L3  AI专项</span>
+              <div style="flex:1;height:1px;background:linear-gradient(90deg,#252060,transparent);"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+              <div style="background:#100d1e;border:1px solid #2a2050;border-radius:10px;padding:16px 18px;border-top:2px solid #a78bfa;"><div style="font-size:26px;font-weight:700;color:#a78bfa;" id="yw-v5">0s</div><div style="font-size:12px;color:#5b4e8a;margin-top:3px;">首次响应时长</div><div style="height:3px;background:#1a1035;border-radius:2px;margin-top:9px;overflow:hidden;"><div style="width:0;height:100%;background:linear-gradient(90deg,#4c1d95,#a78bfa);border-radius:2px;transition:width 1.4s .6s ease;" id="yw-bar5"></div></div><span style="font-size:10px;background:#1e1040;color:#8b5cf6;padding:3px 8px;border-radius:4px;margin-top:7px;display:inline-block;font-weight:600;">达标 ≤30s</span></div>
+              <div style="background:#100d1e;border:1px solid #2a2050;border-radius:10px;padding:16px 18px;border-top:2px solid #818cf8;"><div style="font-size:26px;font-weight:700;color:#a5b4fc;" id="yw-v6">0%</div><div style="font-size:12px;color:#5b4e8a;margin-top:3px;">RAG 召回率</div><div style="height:3px;background:#1a1035;border-radius:2px;margin-top:9px;overflow:hidden;"><div style="width:0;height:100%;background:linear-gradient(90deg,#3730a3,#818cf8);border-radius:2px;transition:width 1.4s .7s ease;" id="yw-bar6"></div></div><span style="font-size:10px;background:#1e1b4b;color:#818cf8;padding:3px 8px;border-radius:4px;margin-top:7px;display:inline-block;font-weight:600;">目标 80%</span></div>
+              <div style="background:#100d1e;border:1px solid #2a2050;border-radius:10px;padding:16px 18px;border-top:2px solid #c084fc;"><div style="font-size:26px;font-weight:700;color:#e9d5ff;" id="yw-v7">0%</div><div style="font-size:12px;color:#5b4e8a;margin-top:3px;">情绪识别率</div><div style="height:3px;background:#1a1035;border-radius:2px;margin-top:9px;overflow:hidden;"><div style="width:0;height:100%;background:linear-gradient(90deg,#6b21a8,#e9d5ff);border-radius:2px;transition:width 1.4s .8s ease;" id="yw-bar7"></div></div><span style="font-size:10px;background:#3b0764;color:#e9d5ff;padding:3px 8px;border-radius:4px;margin-top:7px;display:inline-block;font-weight:600;">目标 75%</span></div>
+            </div>
+          </div>
+
+          <div style="height:1px;background:linear-gradient(90deg,transparent,#2a2050,transparent);margin:18px 0;"></div>
+          <div style="font-size:11px;color:#3d3460;margin-bottom:10px;font-weight:700;letter-spacing:.08em;">异常告警 · BAD CASE 追踪</div>
+          <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #100d1e;"><span style="font-size:11px;padding:3px 8px;border-radius:4px;font-weight:700;background:#4a0828;color:#f9a8d4;flex-shrink:0;">P1</span><span style="font-size:13px;color:#7c6bb5;line-height:1.6;">人工转接率 1.9% — 策略字典 P0 规则触发条件待补充，目标回升至 5-8%</span></div>
+          <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #100d1e;"><span style="font-size:11px;padding:3px 8px;border-radius:4px;font-weight:700;background:#2e1065;color:#c4b5fd;flex-shrink:0;">P2</span><span style="font-size:13px;color:#7c6bb5;line-height:1.6;">NPS 40分 — Prompt 个性化待优化（加入姓名/阶段变量），目标 45 分</span></div>
+          <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;"><span style="font-size:11px;padding:3px 8px;border-radius:4px;font-weight:700;background:#1e1040;color:#a78bfa;flex-shrink:0;">OK</span><span style="font-size:13px;color:#7c6bb5;line-height:1.6;">首次响应 11.2s · 意图准确 94.4% — L3 技术层稳定运行</span></div>
+        </div>
+
+        <div id="yw-ts" style="display:none;">
+          <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:28px;">
+            <span style="font-size:68px;font-weight:800;color:#a78bfa;font-variant-numeric:tabular-nums;line-height:1;" id="yw-cnt">0</span>
+            <div><div style="font-size:17px;color:#e9e4ff;font-weight:500;">条结构化测评集</div><div style="font-size:12px;color:#5b4e8a;margin-top:4px;">6 类意图 · 每类 20 条 · 4 种样本类型</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:18px;">
+            <div style="background:#100d1e;border:1px solid #2a2050;border-radius:10px;padding:14px 16px;border-left:2px solid #7c3aed;"><div style="font-size:13px;color:#e9e4ff;font-weight:500;">主路由</div><div style="font-size:10px;color:#3d3460;font-family:monospace;margin:4px 0 8px;">main_router</div><div style="font-size:22px;font-weight:700;color:#a78bfa;">20条</div></div>
+            <div style="background:#100d1e;border:1px solid #2a2050;border-radius:10px;padding:14px 16px;border-left:2px solid #7c3aed;"><div style="font-size:13px;color:#e9e4ff;font-weight:500;">常见问题</div><div style="font-size:10px;color:#3d3460;font-family:monospace;margin:4px 0 8px;">general_faq</div><div style="font-size:22px;font-weight:700;color:#a78bfa;">20条</div></div>
+            <div style="background:#100d1e;border:1px solid #2a2050;border-radius:10px;padding:14px 16px;border-left:2px solid #7c3aed;"><div style="font-size:13px;color:#e9e4ff;font-weight:500;">进度查询</div><div style="font-size:10px;color:#3d3460;font-family:monospace;margin:4px 0 8px;">query_progress</div><div style="font-size:22px;font-weight:700;color:#a78bfa;">20条</div></div>
+            <div style="background:#100d1e;border:1px solid #2a2050;border-radius:10px;padding:14px 16px;border-left:2px solid #7c3aed;"><div style="font-size:13px;color:#e9e4ff;font-weight:500;">作业辅导</div><div style="font-size:10px;color:#3d3460;font-family:monospace;margin:4px 0 8px;">homework_help</div><div style="font-size:22px;font-weight:700;color:#a78bfa;">20条</div></div>
+            <div style="background:#100d1e;border:1px solid #2a2050;border-radius:10px;padding:14px 16px;border-left:2px solid #7c3aed;"><div style="font-size:13px;color:#e9e4ff;font-weight:500;">个性化路径</div><div style="font-size:10px;color:#3d3460;font-family:monospace;margin:4px 0 8px;">personalized_path</div><div style="font-size:22px;font-weight:700;color:#a78bfa;">20条</div></div>
+            <div style="background:#100d1e;border:1px solid #2a2050;border-radius:10px;padding:14px 16px;border-left:2px solid #7c3aed;"><div style="font-size:13px;color:#e9e4ff;font-weight:500;">课程推荐</div><div style="font-size:10px;color:#3d3460;font-family:monospace;margin:4px 0 8px;">course_recommend</div><div style="font-size:22px;font-weight:700;color:#a78bfa;">20条</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px;">
+            <div style="background:#1e1040;border:1px solid #4c1d95;border-radius:10px;padding:16px;text-align:center;"><div style="font-size:14px;font-weight:700;color:#c4b5fd;">典型样本</div><div style="font-size:12px;color:#7c5fa6;margin-top:5px;">主流核心场景</div></div>
+            <div style="background:#1a0f38;border:1px solid #5b21b6;border-radius:10px;padding:16px;text-align:center;"><div style="font-size:14px;font-weight:700;color:#a78bfa;">边界样本</div><div style="font-size:12px;color:#6d4fa6;margin-top:5px;">模糊极端表达</div></div>
+            <div style="background:#160d30;border:1px solid #6d28d9;border-radius:10px;padding:16px;text-align:center;"><div style="font-size:14px;font-weight:700;color:#ddd6fe;">多意图样本</div><div style="font-size:12px;color:#8b6fd4;margin-top:5px;">复合需求拆解</div></div>
+            <div style="background:#13103a;border:1px solid #4338ca;border-radius:10px;padding:16px;text-align:center;"><div style="font-size:14px;font-weight:700;color:#e0e7ff;">负样本</div><div style="font-size:12px;color:#6366f1;margin-top:5px;">非预期输入</div></div>
+          </div>
+          <div style="font-size:11px;color:#3d3460;margin-bottom:14px;font-weight:700;letter-spacing:.08em;">评估维度</div>
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:13px;"><span style="font-size:13px;color:#5b4e8a;width:120px;flex-shrink:0;">意图识别准确率</span><div style="flex:1;height:8px;background:#100d1e;border-radius:4px;overflow:hidden;"><div style="width:0;height:100%;background:linear-gradient(90deg,#5b21b6,#c4b5fd);border-radius:4px;transition:width 1.4s ease;" class="yw-eval" data-w="94"></div></div><span style="font-size:14px;font-weight:700;color:#c4b5fd;width:44px;text-align:right;">94%</span></div>
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:13px;"><span style="font-size:13px;color:#5b4e8a;width:120px;flex-shrink:0;">路由命中率</span><div style="flex:1;height:8px;background:#100d1e;border-radius:4px;overflow:hidden;"><div style="width:0;height:100%;background:linear-gradient(90deg,#4c1d95,#a78bfa);border-radius:4px;transition:width 1.4s .1s ease;" class="yw-eval" data-w="80"></div></div><span style="font-size:14px;font-weight:700;color:#a78bfa;width:44px;text-align:right;">80%</span></div>
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:13px;"><span style="font-size:13px;color:#5b4e8a;width:120px;flex-shrink:0;">兜底策略触发</span><div style="flex:1;height:8px;background:#100d1e;border-radius:4px;overflow:hidden;"><div style="width:0;height:100%;background:linear-gradient(90deg,#3730a3,#818cf8);border-radius:4px;transition:width 1.4s .2s ease;" class="yw-eval" data-w="100"></div></div><span style="font-size:14px;font-weight:700;color:#818cf8;width:44px;text-align:right;">100%</span></div>
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:26px;"><span style="font-size:13px;color:#5b4e8a;width:120px;flex-shrink:0;">幻觉风险控制</span><div style="flex:1;height:8px;background:#100d1e;border-radius:4px;overflow:hidden;"><div style="width:0;height:100%;background:linear-gradient(90deg,#6b21a8,#ddd6fe);border-radius:4px;transition:width 1.4s .3s ease;" class="yw-eval" data-w="88"></div></div><span style="font-size:14px;font-weight:700;color:#ddd6fe;width:44px;text-align:right;">优</span></div>
+          <div style="display:flex;align-items:center;padding:18px 22px;background:#100d1e;border-radius:12px;border:1px solid #2a2050;">
+            <div style="background:#1e1040;border:1px solid #4c1d95;border-radius:7px;padding:9px 18px;font-size:13px;color:#c4b5fd;font-weight:600;white-space:nowrap;">测评运行</div>
+            <div style="flex:1;height:1px;background:linear-gradient(90deg,#4c1d95,#7c3aed);position:relative;margin:0 4px;"><div style="width:9px;height:9px;border-radius:50%;background:#7c3aed;position:absolute;right:-4px;top:-5px;animation:yw-pulse 1.2s infinite;"></div></div>
+            <div style="background:#1e1040;border:1px solid #4c1d95;border-radius:7px;padding:9px 18px;font-size:13px;color:#c4b5fd;font-weight:600;white-space:nowrap;">发现问题</div>
+            <div style="flex:1;height:1px;background:linear-gradient(90deg,#4c1d95,#7c3aed);position:relative;margin:0 4px;"><div style="width:9px;height:9px;border-radius:50%;background:#7c3aed;position:absolute;right:-4px;top:-5px;animation:yw-pulse 1.2s .3s infinite;"></div></div>
+            <div style="background:#1e1040;border:1px solid #4c1d95;border-radius:7px;padding:9px 18px;font-size:13px;color:#c4b5fd;font-weight:600;white-space:nowrap;">优化策略</div>
+            <div style="flex:1;height:1px;background:linear-gradient(90deg,#4c1d95,#7c3aed);position:relative;margin:0 4px;"><div style="width:9px;height:9px;border-radius:50%;background:#7c3aed;position:absolute;right:-4px;top:-5px;animation:yw-pulse 1.2s .6s infinite;"></div></div>
+            <div style="background:#1e1040;border:1px solid #4c1d95;border-radius:7px;padding:9px 18px;font-size:13px;color:#c4b5fd;font-weight:600;white-space:nowrap;">复测验证</div>
+            <div style="width:36px;height:36px;border-radius:50%;border:2px solid #7c3aed;display:flex;align-items:center;justify-content:center;margin-left:12px;font-size:18px;color:#a78bfa;animation:yw-spin 3s linear infinite;flex-shrink:0;">↺</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes yw-pulse{0%,100%{opacity:1}50%{opacity:.15}}
+@keyframes yw-scan{0%{top:-2px;opacity:0}5%{opacity:1}95%{opacity:.6}100%{top:100%;opacity:0}}
+@keyframes yw-glow{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes yw-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+</style>
+
+<script>
+(function(){
+function countUp(id,target,suffix,dur,delay){setTimeout(function(){var el=document.getElementById(id);if(!el)return;var num=parseFloat(target),start=0,steps=40,inc=num/steps,i=0;var t=setInterval(function(){i++;start=Math.min(start+inc,num);var d=Number.isInteger(num)?Math.round(start):start.toFixed(1);el.textContent=d+suffix;if(i>=steps){el.textContent=target+suffix;clearInterval(t);}},dur/steps);},delay);}
+window.ywInitDB=function(){setTimeout(function(){var bars={bar0:95,bar1:94,bar2:13,bar3:83,bar4:67,bar5:37,bar6:79,bar7:70};Object.keys(bars).forEach(function(k){var el=document.getElementById('yw-'+k);if(el)el.style.width=bars[k]+'%';});},150);countUp('yw-v0','95.0','%',1200,300);countUp('yw-v1','94.4','%',1000,400);countUp('yw-v2','1.9','%',800,500);countUp('yw-v3','83.0','%',1000,600);setTimeout(function(){var e=document.getElementById('yw-v4');if(e)e.textContent='40分';},700);countUp('yw-v5','11.2','s',900,800);countUp('yw-v6','78.9','%',900,900);countUp('yw-v7','70','%',800,1000);setTimeout(function(){var r=document.getElementById('yw-ring0');if(r)r.style.strokeDashoffset=188-(188*95/100);},350);var timeEl=document.getElementById('yw-time');if(timeEl&&!timeEl.dataset.started){timeEl.dataset.started='1';function tick(){var n=new Date();timeEl.textContent=n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0')+':'+n.getSeconds().toString().padStart(2,'0');}tick();setInterval(tick,1000);}};
+function initTS(){setTimeout(function(){document.querySelectorAll('.yw-eval').forEach(function(el){el.style.width=el.dataset.w+'%';});var el=document.getElementById('yw-cnt'),s=0;var t=setInterval(function(){s=Math.min(s+3,120);el.textContent=s;if(s>=120)clearInterval(t);},14);},100);}
+window.ywTab=function(id){document.getElementById('yw-db').style.display=id==='db'?'block':'none';document.getElementById('yw-ts').style.display=id==='ts'?'block':'none';var b1=document.getElementById('yw-b1'),b2=document.getElementById('yw-b2');b1.style.background=id==='db'?'#1e1640':'transparent';b1.style.color=id==='db'?'#c4b5fd':'#6b5fa6';b1.style.fontWeight=id==='db'?'600':'500';b2.style.background=id==='ts'?'#1e1640':'transparent';b2.style.color=id==='ts'?'#c4b5fd':'#6b5fa6';b2.style.fontWeight=id==='ts'?'600':'500';if(id==='ts')initTS();if(id==='db')ywInitDB();};
+var c=document.getElementById('yw-particles');if(c){var ctx=c.getContext('2d'),pts=[];function resize(){c.width=c.offsetWidth;c.height=c.offsetHeight;}resize();for(var i=0;i<36;i++)pts.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5});function draw(){if(c.width===0)resize();ctx.clearRect(0,0,c.width,c.height);pts.forEach(function(p){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(167,139,250,.55)';ctx.fill();});pts.forEach(function(a,i){pts.forEach(function(b,j){if(j<=i)return;var d=Math.hypot(a.x-b.x,a.y-b.y);if(d<110){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='rgba(124,58,237,'+(1-d/110)*.18+')';ctx.lineWidth=.5;ctx.stroke();}});});requestAnimationFrame(draw);}draw();}
+})();
+</script>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section photo" id="photo">
+    <div class="section__inner">
+      <header class="section__header fade-in">
+        <h2 class="section__title">Behind the Lens <span class="en">· 光影</span></h2>
+      </header>
+      <div class="photo__gallery fade-in">
+        <div class="photo__item">
+          <div class="photo__frame">
+            <img src="./photo1.jpg" alt="英国白崖 · Seven Sisters" loading="lazy" />
+            <span class="photo__overlay">拍摄于英国</span>
+          </div>
+          <p class="photo__label">英国白崖 · Seven Sisters</p>
+        </div>
+        <div class="photo__item">
+          <div class="photo__frame">
+            <img src="./photo2.jpg" alt="爱尔兰绿野 · 车窗外" loading="lazy" />
+            <span class="photo__overlay">拍摄于爱尔兰</span>
+          </div>
+          <p class="photo__label">爱尔兰绿野 · 车窗外</p>
+        </div>
+      </div>
+      <p class="photo__caption fade-in">风里真的有诗句，想看雨水浇绿孤山，想看沙漠下暴雨。</p>
+    </div>
+  </section>
+
+  <footer class="contact" id="contact">
+    <h2 class="contact__title fade-in">Let's Connect</h2>
+    <div class="contact__links fade-in">
+      <a class="contact__email" href="mailto:Yuki_my@outlook.com">Yuki_my@outlook.com</a>
+      <a href="tel:18095274364">18095274364</a>
+    </div>
+    <p class="contact__note fade-in">欢迎聊AI产品运营、内容运营，或任何有趣的事</p>
+    <p class="contact__copy fade-in">© 2025 Yueh · 马岳</p>
+  </footer>
+
+  <script>
+  (function () {
+    "use strict";
+
+    var nav = document.getElementById("nav");
+    window.addEventListener("scroll", function () {
+      nav.classList.toggle("scrolled", window.scrollY > 20);
+    });
+
+    var toggle = document.getElementById("navToggle");
+    var navLinks = document.getElementById("navLinks");
+    toggle.addEventListener("click", function () {
+      var isOpen = toggle.classList.toggle("open");
+      navLinks.classList.toggle("open", isOpen);
+      toggle.setAttribute("aria-expanded", isOpen);
+      toggle.setAttribute("aria-label", isOpen ? "关闭菜单" : "打开菜单");
+    });
+    navLinks.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        toggle.classList.remove("open");
+        navLinks.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    /* ===== 3D 覆盖层 ===== */
+    var ITEMS = [
+      { photo: "./m1.jpg",  text: "「好内容的本质是共情——」" },
+      { photo: "./m2.jpg",  text: "「不是信息的堆砌，」" },
+      { photo: "./m3.jpg",  text: "「而是在恰好的时机，说出用户心里已经有但还没说出口的话。」" },
+      { photo: "./m4.jpg",  text: "「先读懂人，再开口。」" },
+      { photo: "./m5.jpg",  text: "「AI内容运营不是用AI替代内容，」" },
+      { photo: "./m6.jpg",  text: "「而是用AI放大内容的精准度和覆盖力。」" },
+      { photo: "./m7.jpg",  text: "「技术是杠杆，洞察才是支点。」" },
+      { photo: "./m8.jpg",  text: "I study a product until I understand its soul — then write it into existence." }
+    ];
+    var TOTAL = ITEMS.length;
+
+    function idx(n) { return ((n % TOTAL) + TOTAL) % TOTAL; }
+
+    function openOverlay() {
+      if (document.querySelector(".profile-overlay")) return;
+
+      var overlay = document.createElement("div");
+      overlay.className = "profile-overlay";
+
+      /* 关闭按钮 */
+      var closeBtn = document.createElement("button");
+      closeBtn.type = "button";
+      closeBtn.className = "profile-overlay__close";
+      closeBtn.textContent = "×";
+
+      /* 计数器 */
+      var counter = document.createElement("p");
+      counter.className = "profile-overlay__counter";
+
+      /* 3D 轮播容器 */
+      var c3d = document.createElement("div");
+      c3d.className = "carousel3d";
+      var track = document.createElement("div");
+      track.className = "carousel3d__track";
+
+      /* 三张卡片 */
+      var cardPrev = document.createElement("div");
+      cardPrev.className = "c3d-card c3d-card--prev";
+      var imgPrev = document.createElement("img");
+      cardPrev.appendChild(imgPrev);
+
+      var cardMain = document.createElement("div");
+      cardMain.className = "c3d-card c3d-card--main";
+      var imgMain = document.createElement("img");
+      cardMain.appendChild(imgMain);
+
+      var cardNext = document.createElement("div");
+      cardNext.className = "c3d-card c3d-card--next";
+      var imgNext = document.createElement("img");
+      cardNext.appendChild(imgNext);
+
+      track.appendChild(cardPrev);
+      track.appendChild(cardMain);
+      track.appendChild(cardNext);
+
+      /* 箭头 */
+      var btnPrev = document.createElement("button");
+      btnPrev.type = "button";
+      btnPrev.className = "carousel3d__btn carousel3d__btn--prev";
+      btnPrev.setAttribute("aria-label", "上一张");
+      btnPrev.innerHTML = "&#8249;";
+
+      var btnNext = document.createElement("button");
+      btnNext.type = "button";
+      btnNext.className = "carousel3d__btn carousel3d__btn--next";
+      btnNext.setAttribute("aria-label", "下一张");
+      btnNext.innerHTML = "&#8250;";
+
+      /* 圆点 */
+      var dotsUl = document.createElement("ul");
+      dotsUl.className = "carousel3d__dots";
+      var dotBtns = [];
+      for (var i = 0; i < TOTAL; i++) {
+        var li = document.createElement("li");
+        var dotBtn = document.createElement("button");
+        dotBtn.type = "button";
+        dotBtn.setAttribute("aria-label", "第" + (i + 1) + "张");
+        li.appendChild(dotBtn);
+        dotsUl.appendChild(li);
+        dotBtns.push(dotBtn);
+      }
+
+      c3d.appendChild(track);
+      c3d.appendChild(btnPrev);
+      c3d.appendChild(btnNext);
+
+      /* 字幕 */
+      var subtitleWrap = document.createElement("div");
+      subtitleWrap.className = "profile-overlay__subtitle-wrap";
+      var subtitleEl = document.createElement("p");
+      subtitleEl.className = "profile-overlay__subtitle";
+      subtitleWrap.appendChild(subtitleEl);
+
+      /* 两侧装饰 */
+      function makeDeco(side, labels) {
+        var d = document.createElement("div");
+        d.className = "overlay-" + side + "-deco";
+        var t = document.createElement("div"); t.className = "overlay-deco__vline-top"; d.appendChild(t);
+        var texts = document.createElement("div"); texts.className = "overlay-deco__texts";
+        labels.forEach(function(lbl) {
+          var s = document.createElement("span"); s.className = "overlay-deco__label"; s.textContent = lbl; texts.appendChild(s);
+        });
+        d.appendChild(texts);
+        var b = document.createElement("div"); b.className = "overlay-deco__vline-bottom"; d.appendChild(b);
+        return d;
+      }
+
+      overlay.appendChild(closeBtn);
+      overlay.appendChild(makeDeco("left", ["CONTENT", "CREATOR"]));
+      overlay.appendChild(makeDeco("right", ["AI · CONTENT", "OPERATIONS"]));
+      overlay.appendChild(counter);
+      overlay.appendChild(dotsUl);
+      overlay.appendChild(c3d);
+      overlay.appendChild(subtitleWrap);
+      document.body.appendChild(overlay);
+      document.body.style.overflow = "hidden";
+
+      /* ===== 状态与逻辑 ===== */
+      var current = 0;
+      var animating = false;
+      var timer = null;
+      var INTERVAL = 4000;
+
+      function updateCounter() {
+        var n = String(current + 1).padStart(2, "0");
+        var t = String(TOTAL).padStart(2, "0");
+        counter.textContent = n + " / " + t;
+      }
+
+      function updateDots() {
+        dotBtns.forEach(function(b, i) { b.classList.toggle("active", i === current); });
+      }
+
+      function setImages() {
+        imgPrev.src = ITEMS[idx(current - 1)].photo;
+        imgMain.src = ITEMS[current].photo;
+        imgNext.src = ITEMS[idx(current + 1)].photo;
+        imgPrev.alt = "照片 " + (idx(current - 1) + 1);
+        imgMain.alt = "照片 " + (current + 1);
+        imgNext.alt = "照片 " + (idx(current + 1) + 1);
+      }
+
+      function showSubtitle(text) {
+        subtitleEl.classList.remove("is-visible");
+        subtitleEl.classList.add("is-leaving");
+        setTimeout(function() {
+          subtitleEl.textContent = text;
+          subtitleEl.classList.remove("is-leaving");
+          requestAnimationFrame(function() { subtitleEl.classList.add("is-visible"); });
+        }, 200);
+      }
+
+      function goTo(newIdx, direction) {
+        if (animating || newIdx === current) return;
+        animating = true;
+
+        /* 与图片同步：在动画开始时立即切换字幕 */
+        showSubtitle(ITEMS[newIdx].text);
+
+        var enterClass = direction === "next" ? "c3d-card--enter-from-right" : "c3d-card--enter-from-left";
+        var exitClass  = direction === "next" ? "c3d-card--exit-left"        : "c3d-card--exit-right";
+
+        /* 主卡飞出 */
+        cardMain.classList.add(exitClass);
+
+        /* 新主卡先移到场外 */
+        var newMain = document.createElement("div");
+        newMain.className = "c3d-card c3d-card--main " + enterClass;
+        var newImg = document.createElement("img");
+        newImg.src = ITEMS[newIdx].photo;
+        newImg.alt = "照片 " + (newIdx + 1);
+        newMain.appendChild(newImg);
+        track.appendChild(newMain);
+
+        /* 下一帧触发过渡 */
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            newMain.classList.remove(enterClass);
+            newMain.classList.add("c3d-card--main");
+          });
+        });
+
+        setTimeout(function() {
+          /* 清理旧主卡 */
+          track.removeChild(cardMain);
+          cardMain = newMain;
+
+          current = newIdx;
+          setImages();
+          updateCounter();
+          updateDots();
+          animating = false;
+        }, 520);
+      }
+
+      function next() { goTo(idx(current + 1), "next"); }
+      function prev() { goTo(idx(current - 1), "prev"); }
+
+      function resetTimer() {
+        if (timer) clearInterval(timer);
+        timer = setInterval(next, INTERVAL);
+      }
+
+      function closeOverlay() {
+        if (timer) clearInterval(timer);
+        document.removeEventListener("keydown", onKey);
+        overlay.remove();
+        document.body.style.overflow = "";
+      }
+
+      function onKey(e) {
+        if (e.key === "Escape") closeOverlay();
+        if (e.key === "ArrowRight") { next(); resetTimer(); }
+        if (e.key === "ArrowLeft")  { prev(); resetTimer(); }
+      }
+
+      /* 初始化 */
+      setImages();
+      updateCounter();
+      updateDots();
+      subtitleEl.textContent = ITEMS[0].text;
+      requestAnimationFrame(function() { subtitleEl.classList.add("is-visible"); });
+
+      btnNext.addEventListener("click", function() { next(); resetTimer(); });
+      btnPrev.addEventListener("click", function() { prev(); resetTimer(); });
+      closeBtn.addEventListener("click", closeOverlay);
+      document.addEventListener("keydown", onKey);
+
+      dotBtns.forEach(function(b, i) {
+        b.addEventListener("click", function() {
+          var dir = i > current ? "next" : "prev";
+          goTo(i, dir); resetTimer();
+        });
+      });
+
+      resetTimer();
+      closeBtn.focus();
+    }
+
+    document.querySelector(".nav__logo").addEventListener("click", function(e) {
+      e.preventDefault();
+      toggle.classList.remove("open");
+      navLinks.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+      openOverlay();
+    });
+
+    /* 滚动淡入 */
+    var fadeEls = document.querySelectorAll(".fade-in");
+    if ("IntersectionObserver" in window) {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) { entry.target.classList.add("visible"); obs.unobserve(entry.target); }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+      fadeEls.forEach(function(el) { obs.observe(el); });
+    } else {
+      fadeEls.forEach(function(el) { el.classList.add("visible"); });
+    }
+
+    /* 外链新标签 */
+    document.querySelectorAll('a[href^="http"]').forEach(function(a) {
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener noreferrer");
+    });
+  })();
+  </script>
+</body>
+</html>
